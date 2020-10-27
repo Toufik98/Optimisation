@@ -8,8 +8,53 @@ Programme cadre pour le TP n°2
 
 @author: Florence Ossart, Sorbonne Université
 """
-
+import numpy as np
+import matplotlib.pylab as plt
 #%% Programme de test de la recherche de minimum par dichotomie
+def dichotomie(f, x1, x5):
+    x3 = (x1 + x5)/2
+    x2 = (x3 + x1)/2
+    x4 = (x3 + x5)/2
+    x_inf = x1
+    x_sup = x5
+    
+    f1 , f2, f3, f4, f5 = f(x1), f(x2), f(x3), f(x4), f(x5)
+    
+    if f1 < f2 < f3 < f4 < f5 :
+        x_inf = x1
+        x_sup = x2
+    elif f1 > f2 < f3 < f4 < f5 :
+        x_inf = x1
+        x_sup = x3
+    
+    elif f1 > f2 > f3 < f4 < f5 :
+        x_inf = x2
+        x_sup = x4
+    elif f1 > f2 > f3 > f4 < f5 :
+        x_inf = x3
+        x_sup = x5
+    
+    elif f1 > f2 > f3 > f4 > f5 :
+        x_inf = x4
+        x_sup = x5
+    
+    return x_inf , x_sup
+        
+def minimumDichotomie(f, x_min, x_max, eps):
+    err = False
+    bornes_min = []
+    bornes_max = []
+    n_iter = 0 
+    
+    x1 , x5 = x_min , x_max
+    while x5 - x1 > eps :
+        
+        bornes_min.append([x1,f(x1)])
+        bornes_max.append([x5,f(x5)])
+        x1 , x5 = dichotomie(f, x1, x5)
+        n_iter = n_iter + 1 
+    
+    return bornes_min, bornes_max, n_iter, err
 
 #%% Fonction test n°1
 def f1(x) :
